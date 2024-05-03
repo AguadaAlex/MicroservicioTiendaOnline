@@ -7,17 +7,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 @RestController
+@RequestMapping("/clientes")
 public class ClienteRestController {
     private List<Cliente> clientes = new ArrayList<>(Arrays.asList(
             new Cliente("Lean","1234","Leandro"),
             new Cliente("Ale","1234","Alejandro"),
             new Cliente("Mar","1234","Mariano")
     ));
-    @GetMapping("/clientes")
+    @GetMapping
     public List<Cliente> getClientes(){
         return clientes;
     }
-    @GetMapping("/clientes/{userName}")
+    @GetMapping("/{userName}")
     public Cliente getCliente(@PathVariable String userName){
         return clientes.stream().
                 filter(cliente -> cliente.getUsername().equalsIgnoreCase(userName)).
@@ -30,10 +31,26 @@ public class ClienteRestController {
 //        }
 //        return null;
     }
-    @PostMapping("/clientes")
+    @PostMapping
     public Cliente altaCliente(@RequestBody Cliente cliente){
         clientes.add(cliente);
         return cliente;
+    }
+    @PutMapping
+    public Cliente modificacionCiente(@RequestBody Cliente cliente){
+        Cliente clienteEncontrado = clientes.stream().
+                filter(cli -> cli.getUsername().equalsIgnoreCase(cliente.getUsername())).
+                findFirst().orElseThrow();
+        clienteEncontrado.setPassword(cliente.getPassword());
+        clienteEncontrado.setNombre(cliente.getNombre());
+        return clienteEncontrado;
+    }
+    @DeleteMapping("/{userName}")
+    public void deleteCliente(@PathVariable String userName){
+        Cliente clienteEncontrado = clientes.stream().
+                filter(cli -> cli.getUsername().equalsIgnoreCase(userName)).
+                findFirst().orElseThrow();
+        clientes.remove(clienteEncontrado);
     }
 
 
