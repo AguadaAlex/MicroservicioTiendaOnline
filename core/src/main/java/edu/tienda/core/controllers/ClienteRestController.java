@@ -2,6 +2,7 @@ package edu.tienda.core.controllers;
 
 import edu.tienda.core.domain.Cliente;
 
+import edu.tienda.core.exceptions.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -25,6 +26,10 @@ public class ClienteRestController {
     }
     @GetMapping("/{userName}")
     public ResponseEntity<?> getCliente(@PathVariable String userName){
+        if (userName.length()!=3){
+            throw new BadRequestException("El parametro nombre de usuario debe contener 3 parametros");
+        }
+
         return clientes.stream().
                 filter(cliente -> cliente.getUsername()
                         .equalsIgnoreCase(userName))
