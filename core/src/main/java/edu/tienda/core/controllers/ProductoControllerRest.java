@@ -8,8 +8,10 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,4 +40,15 @@ public class ProductoControllerRest {
         ));
         return ResponseEntity.ok(productos);
     };
+    @PostMapping
+    public ResponseEntity<?> altaProducto(@RequestBody Producto producto){
+        productosService.saveProducto(producto);
+        //OBTENIENDO URL DE SERVICIO
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(producto.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(producto);
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("BD")
 @ConditionalOnProperty(
@@ -18,16 +19,26 @@ public class ProductosServiceBDImpl implements ProductoService{
     @Autowired
     private ProductosRepository productosRepository;
     public List<Producto> getProductos(){
-        List<ProductoEntity> productoEntities=productosRepository.findAll();
-        List<Producto> productos= new ArrayList<>();
-        for (ProductoEntity productoEntity : productoEntities){
+       // List<ProductoEntity> productoEntities=productosRepository.findAll();
+        List<Producto> productos= productosRepository.findAll().stream().map(productoEntity ->{
             Producto producto = new Producto();
             producto.setId(productoEntity.getId());
             producto.setNombre(productoEntity.getNombre());
             producto.setPrecio(productoEntity.getPrecio());
             producto.setStock(productoEntity.getStock());
-            productos.add(producto);
-        }
+            return producto;
+        }).collect(Collectors.toList());
         return productos;
+    }
+    @Override
+    public void saveProducto(Producto producto){
+        //MAPEO DE PRODUCTO A PRODUCTOENTITY
+        ProductoEntity productoEntity= new ProductoEntity();
+        productoEntity.setNombre(producto.getNombre());
+        productoEntity.setPrecio(producto.getPrecio());
+        productoEntity.setStock(producto.getStock());
+        //PERSISTENCIA
+        productosRepository.save(productoEntity);
+
     }
 }

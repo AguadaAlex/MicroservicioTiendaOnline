@@ -26,4 +26,7 @@ public class ProductosServiceImplApiExterna implements ProductoService{
         List<Producto> productos = response.getBody();
         return productos;
     }
+    @Override
+    public void saveProducto(Producto producto) {
+    }
 }

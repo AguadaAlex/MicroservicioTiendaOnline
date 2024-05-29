@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ProductoService {
     public List<Producto> getProductos();
+    public void saveProducto(Producto producto);
 }

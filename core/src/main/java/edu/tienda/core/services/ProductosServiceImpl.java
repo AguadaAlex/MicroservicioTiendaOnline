@@ -30,6 +30,9 @@ public class ProductosServiceImpl implements ProductoService{
     public List<Producto> getProductos(){
         return productos;
     }
+    @Override
+    public void saveProducto(Producto producto) {
+    }
 
 }
 
